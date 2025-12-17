@@ -1,0 +1,21 @@
+# This file defines a Render.com web service for your Telegram bot.
+# For more information, see https://render.com/docs/yaml
+
+services:
+  - type: web
+    name: yunks-game-bot
+    env: python
+    # A pre-existing environment variable called `PORT` will be set by Render.
+    # Your application needs to listen on this port.
+    # The start command expects WEBHOOK_URL and PORT to be set as environment variables on Render.
+    # You will also need TELEGRAM_TOKEN, FIREBASE_CREDENTIALS_PATH, and GAME_HOST_USER_ID
+    # to be set as environment variables on Render.
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python main.py"
+    # Ensure this port matches the $PORT environment variable set by Render
+    # and that your application listens on it.
+    port: 10000 
+    # Optional: Health check to ensure your service is running
+    # healthCheckPath: /
+    # numInstances: 1 # Optional: number of instances
+    # region: oregon # Optional: uncomment and replace to choose a different region

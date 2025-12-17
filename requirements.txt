@@ -1,0 +1,9 @@
+python-telegram-bot[ext]
+python-dotenv
+firebase-admin
+pytest
+pytest-mock
+Flask
+structlog
+pytest-asyncio
+requests

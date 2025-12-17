@@ -1,0 +1,123 @@
+import random
+import time
+from telegram import Update
+from telegram.ext import CallbackContext
+import structlog
+from Yunks_game import database as db
+
+logger = structlog.get_logger(__name__)
+
+STEAL_COOLDOWN = 3600  # 1 hour in seconds
+STEAL_SUCCESS_RATE = 0.5  # 50%
+STEAL_PENALTY = 5
+MIN_STEAL_AMOUNT = 5
+MAX_STEAL_AMOUNT = 15
+
+async def steal_xp(update: Update, context: CallbackContext) -> None:
+    """Allows a user to attempt to steal XP from another user."""
+    thief = update.effective_user
+    db_client = context.bot_data['db']
+
+    # Check for cooldown
+    last_steal_attempt = context.user_data.get('last_steal', 0)
+    if time.time() - last_steal_attempt < STEAL_COOLDOWN:
+        remaining_time = int(STEAL_COOLDOWN - (time.time() - last_steal_attempt))
+        await update.message.reply_text(f"You're on cooldown! Try again in {remaining_time // 60} minutes.")
+        return
+
+    # User must reply to a message to target a victim
+    if not update.message.reply_to_message:
+        await update.message.reply_text("To steal XP, you must reply to a message from the user you want to rob.")
+        return
+
+    victim = update.message.reply_to_message.from_user
+    
+    if victim.id == thief.id:
+        await update.message.reply_text("You can't steal from yourself, you silly goose!")
+        return
+
+    if victim.is_bot:
+        await update.message.reply_text("You can't steal from bots, they have no pockets to pick!")
+        return
+
+    context.user_data['last_steal'] = time.time() # Set cooldown regardless of outcome
+
+    # Roll the dice
+    if random.random() < STEAL_SUCCESS_RATE:
+        # Success!
+        stolen_amount = random.randint(MIN_STEAL_AMOUNT, MAX_STEAL_AMOUNT)
+        
+        # Perform the transaction
+        success = await db.transfer_xp(db_client, from_user_id=victim.id, to_user_id=thief.id, amount=stolen_amount)
+
+        if success:
+            message = (
+                f"🎉 Success! {thief.mention_html()} masterfully swiped {stolen_amount} XP from {victim.mention_html()}!"
+            )
+            logger.info("XP steal success", thief_id=thief.id, victim_id=victim.id, amount=stolen_amount)
+        else:
+            message = (
+                f"😅 {thief.mention_html()} tried to steal from {victim.mention_html()}, but the victim had no XP to steal!"
+            )
+            logger.info("XP steal failed, victim has no XP", thief_id=thief.id, victim_id=victim.id)
+
+        await update.message.reply_html(message)
+
+    else:
+        # Failure
+        await db.add_xp(db_client, thief.id, thief.username, xp_to_add=-STEAL_PENALTY)
+        message = (
+            f"🚓 Oh no! {thief.mention_html()} fumbled the attempt to rob {victim.mention_html()} "
+            f"and lost {STEAL_PENALTY} XP in the process!"
+        )
+        logger.info("XP steal failed", thief_id=thief.id, victim_id=victim.id, penalty=STEAL_PENALTY)
+        await update.message.reply_html(message)
+
+async def give_xp(update: Update, context: CallbackContext) -> None:
+    """Gives a specified amount of XP from the command user to another user."""
+    giver = update.effective_user
+    db_client = context.bot_data['db']
+
+    if not update.message.reply_to_message:
+        await update.message.reply_text("Please reply to a user's message to give them XP.")
+        return
+        
+    try:
+        amount = int(context.args[0])
+        if amount <= 0:
+            await update.message.reply_text("You must give a positive amount of XP!")
+            return
+    except (IndexError, ValueError):
+        await update.message.reply_text("Usage: /give <amount>")
+        return
+
+    recipient = update.message.reply_to_message.from_user
+
+    if recipient.id == giver.id:
+        await update.message.reply_text("You can't give XP to yourself.")
+        return
+
+    if recipient.is_bot:
+        await update.message.reply_text("Bots have no use for your XP.")
+        return
+
+    # Check if giver has enough XP
+    giver_data = db.get_user_data(db_client, giver.id)
+    if not giver_data or giver_data.get('xp', 0) < amount:
+        await update.message.reply_text(f"You don't have enough XP to give {amount} away!")
+        return
+        
+    # Perform the transaction
+    success = await db.transfer_xp(db_client, from_user_id=giver.id, to_user_id=recipient.id, amount=amount)
+
+    if success:
+        message = (
+            f"🎁 {giver.mention_html()} generously gave {amount} XP to {recipient.mention_html()}!"
+        )
+        logger.info("XP give success", giver_id=giver.id, recipient_id=recipient.id, amount=amount)
+    else:
+        # This case should ideally not be hit if the above checks pass, but is here for safety
+        message = "An unexpected error occurred during the transfer."
+        logger.error("XP give failed unexpectedly after checks", giver_id=giver.id, recipient_id=recipient.id, amount=amount)
+
+    await update.message.reply_html(message)
