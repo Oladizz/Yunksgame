@@ -5,10 +5,10 @@ import os
 import html # Added for HTML escaping
 import json # Added for JSON serialization
 
-from Yunks_game.game_logic import interface
-from Yunks_game.game_logic.game_state import Game
-from Yunks_game.game_logic.player import Player
-from Yunks_game.handlers.game_handler import strict_edit_message
+from ..game_logic import interface
+from ..game_logic.game_state import Game
+from ..game_logic.player import Player
+from .game_handler import strict_edit_message
 
 logger = structlog.get_logger(__name__)
 
@@ -87,13 +87,6 @@ async def start_farm_game(update: Update, context: CallbackContext) -> None:
         user = update.effective_user
         chat_id = update.effective_chat.id
         reply_target = update.message
-
-    # --- Restrict game start to a specific user for testing ---
-    allowed_user_id = os.getenv("GAME_HOST_USER_ID")
-    if allowed_user_id and str(user.id) != allowed_user_id:
-        await reply_target.reply_text("Only the designated test user can start the game for now.")
-        return
-    # --- End restriction ---
 
     if 'rat_game' in context.chat_data:
         await reply_target.reply_text("A game is already in progress in this chat!")

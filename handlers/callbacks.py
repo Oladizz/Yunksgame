@@ -3,10 +3,10 @@ from typing import Tuple
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext
 import structlog
-from Yunks_game import database as db
-from Yunks_game import game
-from Yunks_game.handlers import core # Import core handlers for help_command
-from Yunks_game.handlers.game_handler import strict_edit_message
+from .. import database as db
+from .. import game
+from . import core # Import core handlers for help_command
+from .game_handler import strict_edit_message
 
 logger = structlog.get_logger(__name__)
 
@@ -67,12 +67,12 @@ async def button_handler(update: Update, context: CallbackContext) -> None:
         await core.start_farm_game(update, context)
     
     elif query.data == 'start_lps_game': # New handler for LPS game
-        from Yunks_game.handlers import last_person_standing_handler # Import here to avoid circular dependency
+        from . import last_person_standing_handler # Import here to avoid circular dependency
         await strict_edit_message(context, query.message.chat_id, query.message.message_id, "Starting 'Last Person Standing'...", None, parse_mode='HTML')
         await last_person_standing_handler.start_lps_game(update, context)
     
     elif query.data == 'start_lmw_game': # New handler for LMW game
-        from Yunks_game.handlers import last_message_wins_handler # Import here to avoid circular dependency
+        from . import last_message_wins_handler # Import here to avoid circular dependency
         await strict_edit_message(context, query.message.chat_id, query.message.message_id, "Starting 'Last Message Wins'...", None, parse_mode='HTML')
         await last_message_wins_handler.start_lmw_game(update, context)
         

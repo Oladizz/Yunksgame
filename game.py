@@ -1,6 +1,6 @@
 import random
 import structlog
-from Yunks_game import database
+from . import database
 
 logger = structlog.get_logger(__name__)
 
