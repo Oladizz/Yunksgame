@@ -8,12 +8,12 @@ import asyncio
 import time
 from telegram.error import RetryAfter, TimedOut, NetworkError
 
-from Yunks_game.game_logic.game_state import Game, GamePhase
-from Yunks_game.game_logic.player import Player, Role
-from Yunks_game.game_logic.farm import Farm, FarmLocation
-from Yunks_game.game_logic import interface
-from Yunks_game.handlers import core
-from Yunks_game import database as db
+from ..game_logic.game_state import Game, GamePhase
+from ..game_logic.player import Player, Role
+from ..game_logic.farm import Farm, FarmLocation
+from ..game_logic import interface
+from . import core
+from .. import database as db
 
 logger = structlog.get_logger(__name__)
 
@@ -305,12 +305,6 @@ async def handle_lobby_phase(update: Update, context: CallbackContext, game: Gam
     """Handles all actions that can be taken during the LOBBY phase."""
     chat_id = update.effective_chat.id
     if action == "join":
-        # --- Restrict game join to a specific user for testing ---
-        allowed_user_id = os.getenv("GAME_HOST_USER_ID")
-        if allowed_user_id and str(user.id) != allowed_user_id:
-            await update.callback_query.answer("Only the designated test user can join the game for now.", show_alert=True)
-            return
-        # --- End restriction ---
         logger.info(
             "Join attempt",
             game_id=chat_id,

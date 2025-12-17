@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends
 import os
-from Yunks_game import database
+from ... import database
 from contextlib import asynccontextmanager
 import json
 

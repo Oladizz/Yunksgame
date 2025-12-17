@@ -8,10 +8,10 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, error
 from telegram.ext import CallbackContext
 import structlog
 
-from Yunks_game import database as db
-from Yunks_game.game_logic.last_person_standing import LastPersonStanding, GameStatus, EliminationReason
-from Yunks_game.game_logic.player import Player # Reusing the Player class
-from Yunks_game.handlers.game_handler import strict_edit_message # Reusing strict_edit_message
+from .. import database as db
+from ..game_logic.last_person_standing import LastPersonStanding, GameStatus, EliminationReason
+from ..game_logic.player import Player # Reusing the Player class
+from .game_handler import strict_edit_message # Reusing strict_edit_message
 
 logger = structlog.get_logger(__name__)
 

@@ -2,7 +2,7 @@ import os
 from telegram import Update
 from telegram.ext import CallbackContext
 import structlog
-from Yunks_game import database as db
+from .. import database as db
 
 logger = structlog.get_logger(__name__)
 
@@ -37,7 +37,14 @@ async def award_xp(update: Update, context: CallbackContext) -> None:
     logger.info("Admin awarded XP", admin_id=admin.id, target_id=target_user.id, amount=amount)
 
 async def end_game_command(update: Update, context: CallbackContext) -> None:
-    """Ends any active game in the current chat."""
+    """Ends any active game in the current chat. Admin-only."""
+    admin = update.effective_user
+
+    if admin.id not in ADMIN_USER_IDS:
+        await update.message.reply_text("This is an admin-only command.")
+        logger.warning("Non-admin user tried to use /endgame", user_id=admin.id)
+        return
+
     chat_id = update.effective_chat.id
     
     if 'rat_game' in context.chat_data and context.chat_data['rat_game'].chat_id == chat_id:

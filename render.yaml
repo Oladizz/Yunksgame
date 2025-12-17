@@ -8,7 +8,6 @@ services:
     # A pre-existing environment variable called `PORT` will be set by Render.
     # Your application needs to listen on this port.
     # The start command expects WEBHOOK_URL and PORT to be set as environment variables on Render.
-    # You will also need TELEGRAM_TOKEN, FIREBASE_CREDENTIALS_PATH, and GAME_HOST_USER_ID
     # to be set as environment variables on Render.
     buildCommand: "pip install -r requirements.txt"
     startCommand: "python main.py"
