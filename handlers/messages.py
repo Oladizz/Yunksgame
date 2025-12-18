@@ -1,8 +1,8 @@
 import structlog
 from telegram import Update
 from telegram.ext import CallbackContext
-from .. import database as db
-from .. import game
+from Yunks_game import database as db
+from Yunks_game import game
 
 logger = structlog.get_logger(__name__)
 

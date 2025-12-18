@@ -7,10 +7,10 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, error
 from telegram.ext import CallbackContext, JobQueue, MessageHandler, filters
 import structlog
 
-from .. import database as db
-from ..game_logic.last_message_wins import LastMessageWinsGame, LastMessageWinsStatus
-from .game_handler import strict_edit_message # Reusing strict_edit_message
-from ..game_logic.player import Player # To get player data for XP handling
+from Yunks_game import database as db
+from Yunks_game.game_logic.last_message_wins import LastMessageWinsGame, LastMessageWinsStatus
+from Yunks_game.handlers.game_handler import strict_edit_message # Reusing strict_edit_message
+from Yunks_game.game_logic.player import Player # To get player data for XP handling
 
 logger = structlog.get_logger(__name__)
 
