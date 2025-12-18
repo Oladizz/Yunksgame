@@ -8,12 +8,12 @@ import asyncio
 import time
 from telegram.error import RetryAfter, TimedOut, NetworkError
 
-from ..game_logic.game_state import Game, GamePhase
-from ..game_logic.player import Player, Role
-from ..game_logic.farm import Farm, FarmLocation
-from ..game_logic import interface
-from . import core
-from .. import database as db
+from Yunks_game.game_logic.game_state import Game, GamePhase
+from Yunks_game.game_logic.player import Player, Role
+from Yunks_game.game_logic.farm import Farm, FarmLocation
+from Yunks_game.game_logic import interface
+from Yunks_game.handlers import core
+from Yunks_game import database as db
 
 logger = structlog.get_logger(__name__)
 

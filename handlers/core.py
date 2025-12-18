@@ -5,10 +5,10 @@ import os
 import html # Added for HTML escaping
 import json # Added for JSON serialization
 
-from ..game_logic import interface
-from ..game_logic.game_state import Game
-from ..game_logic.player import Player
-from .game_handler import strict_edit_message
+from Yunks_game.game_logic import interface
+from Yunks_game.game_logic.game_state import Game
+from Yunks_game.game_logic.player import Player
+from Yunks_game.handlers.game_handler import strict_edit_message
 
 logger = structlog.get_logger(__name__)
 

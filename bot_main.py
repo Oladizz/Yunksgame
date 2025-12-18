@@ -6,10 +6,10 @@ import structlog
 import telegram
 import asyncio
 
-from . import database
-from . import game # For "Guess the Number"
-from .handlers import core, messages, callbacks, actions, game_handler, admin, last_person_standing_handler, last_message_wins_handler
-from .logging_config import setup_logging
+from Yunks_game import database
+from Yunks_game import game # For "Guess the Number"
+from Yunks_game.handlers import core, messages, callbacks, actions, game_handler, admin, last_person_standing_handler, last_message_wins_handler
+from Yunks_game.logging_config import setup_logging
 
 # Set up logging
 setup_logging()

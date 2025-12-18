@@ -10,7 +10,7 @@ services:
     # The start command expects WEBHOOK_URL and PORT to be set as environment variables on Render.
     # to be set as environment variables on Render.
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "python main.py"
+    startCommand: "python bot_main.py"
     # Ensure this port matches the $PORT environment variable set by Render
     # and that your application listens on it.
     port: 10000 
