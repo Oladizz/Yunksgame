@@ -93,7 +93,7 @@ async def lastman_callback_handler(update: Update, context: CallbackContext) -> 
 
     if 'lastman_game' not in context.chat_data:
         print("DEBUG: No active 'lastman_game' in chat_data.")
-        await query.edit_message_text("No active 'Last Person Standing' game lobby.")
+        await query.message.edit_message_text("No active 'Last Person Standing' game lobby.")
         return
     
     game_data = context.chat_data['lastman_game']
@@ -112,7 +112,7 @@ async def lastman_callback_handler(update: Update, context: CallbackContext) -> 
             'username': user.username if user.username else user.first_name,
             'mention': user.mention_html()
         }
-        await query.edit_message_text(
+        await query.message.edit_text(
             text=f"👑 <b>Last Person Standing Lobby</b> 👑\n\n"
                  f"Current players: {len(game_data['players'])}\n"
                  f"Join to compete! Last three standing win XP!\n\n"
