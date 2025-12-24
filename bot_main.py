@@ -97,7 +97,7 @@ def main() -> None:
     
     token = os.getenv('TELEGRAM_TOKEN')
     webhook_url = os.getenv('WEBHOOK_URL')
-    port = int(os.getenv('PORT', '8443'))
+    port = int(os.getenv('PORT', '8000'))
     # Determine Firebase credentials source
     firebase_credentials_data = None
     is_json_string = False

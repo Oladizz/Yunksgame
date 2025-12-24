@@ -1,0 +1,19 @@
+
+services:
+  - type: web
+    name: yunks-game-bot
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python bot_main.py"
+    plan: free # or "starter", "standard", etc.
+    envVars:
+      - key: TELEGRAM_TOKEN
+        sync: false
+      - key: FIREBASE_CREDENTIALS_PATH
+        sync: false
+      # - key: FIREBASE_CREDENTIALS
+      #   sync: false
+      # - key: WEBHOOK_URL
+      #   sync: false
+      - key: PORT
+        value: "8000" # Render requires services to bind to $PORT, usually 8000
