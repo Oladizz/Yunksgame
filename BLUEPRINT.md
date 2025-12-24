@@ -1,5 +1,4 @@
 # Yunks Game Bot 2.0.1 Blueprint
-
 This blueprint outlines the development plan for the Yunks Game Bot v2.0.1. Each feature will be implemented, unit tested, and then manually tested before moving to the next.
 
 ## 1. Core Infrastructure & Setup
@@ -17,7 +16,7 @@ This blueprint outlines the development plan for the Yunks Game Bot v2.0.1. Each
 - [X] **Main Menu (`/start`):**
     - [X] Welcome message and main menu buttons (Profile, Leaderboard, Play a Game, How to Play).
     - [X] Handles both command and callback queries.
-- [X] **User Profile (`/menu` & 'My Profile' button):**
+- [X] **User Profile (`/menu` & 'My Profile' button):
     - [X] Displays user's username and current XP.
 - [X] **Leaderboard (`/leaderboard` & 'Leaderboard' button):**
     - [X] Displays top N users by XP.
