@@ -24,7 +24,7 @@ This blueprint outlines the development plan for the Yunks Game Bot v2.0.1. Each
     - [X] Handles optional limit argument.
 - [X] **Help Command (`/help` & 'How to Play' button):**
     - [X] Detailed guide to all bot commands and features.
-- [ ] **Bot Mention Handler:** Respond when the bot is mentioned.
+- [X] **Bot Mention Handler:** Respond when the bot is mentioned.
 
 ## 3. Action Commands
 - [X] **Steal XP (`/steal`):**
