@@ -3,7 +3,7 @@ import random
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
 import structlog
-from .. import database as db
+from yunks_game_2_0_1 import database as db
 
 logger = structlog.get_logger(__name__)
 
