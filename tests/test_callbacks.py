@@ -2,8 +2,8 @@ import pytest
 from unittest.mock import MagicMock, AsyncMock, patch
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
-from yunks_game_2_0_1.handlers import callbacks, core, game_guess_number
-from yunks_game_2_0_1 import database
+from handlers import callbacks, core, game_guess_number
+import database
 
 @pytest.fixture
 def mock_update_callback():
@@ -33,7 +33,7 @@ def mock_context_with_admin():
     return context
 
 @pytest.mark.asyncio
-@patch('yunks_game_2_0_1.handlers.core.leaderboard', new_callable=AsyncMock)
+@patch('handlers.core.leaderboard', new_callable=AsyncMock)
 async def test_button_handler_leaderboard(mock_leaderboard, mock_update_callback):
     """Test that the button_handler calls core.leaderboard for 'leaderboard' data."""
     mock_update_callback.callback_query.data = 'leaderboard'
@@ -50,7 +50,7 @@ async def test_button_handler_leaderboard(mock_leaderboard, mock_update_callback
     mock_leaderboard.assert_called_once()
 
 @pytest.mark.asyncio
-@patch('yunks_game_2_0_1.handlers.core.start', new_callable=AsyncMock)
+@patch('handlers.core.start', new_callable=AsyncMock)
 async def test_button_handler_start_menu(mock_start, mock_update_callback):
     """Test that the button_handler calls core.start for 'start_menu' data."""
     mock_update_callback.callback_query.data = 'start_menu'
@@ -71,7 +71,7 @@ async def test_button_handler_profile_user_exists(mock_update_callback, mock_con
     """Test the profile button when the user exists."""
     mock_update_callback.callback_query.data = 'profile'
     
-    mocker.patch('yunks_game_2_0_1.database.get_user_data', return_value={'username': 'testuser', 'xp': 120})
+    mocker.patch('database.get_user_data', return_value={'username': 'testuser', 'xp': 120})
 
     await callbacks.button_handler(mock_update_callback, mock_context_with_admin)
     
@@ -87,7 +87,7 @@ async def test_button_handler_profile_no_user(mock_update_callback, mock_context
     """Test the profile button when the user does not exist."""
     mock_update_callback.callback_query.data = 'profile'
     
-    mocker.patch('yunks_game_2_0_1.database.get_user_data', return_value=None)
+    mocker.patch('database.get_user_data', return_value=None)
 
     await callbacks.button_handler(mock_update_callback, mock_context_with_admin)
     
@@ -96,7 +96,7 @@ async def test_button_handler_profile_no_user(mock_update_callback, mock_context
     assert "You don't have a profile yet" in mock_update_callback.callback_query.message.edit_text.call_args.kwargs['text']
 
 @pytest.mark.asyncio
-@patch('yunks_game_2_0_1.handlers.core.help_command', new_callable=AsyncMock)
+@patch('handlers.core.help_command', new_callable=AsyncMock)
 async def test_button_handler_help_menu(mock_help_command, mock_update_callback, mock_context_with_admin):
     """Test that the help button calls core.help_command."""
     mock_update_callback.callback_query.data = 'help_menu'
@@ -107,7 +107,7 @@ async def test_button_handler_help_menu(mock_help_command, mock_update_callback,
     mock_help_command.assert_called_once()
 
 @pytest.mark.asyncio
-@patch('yunks_game_2_0_1.handlers.game_guess_number.start_new_game', new_callable=AsyncMock)
+@patch('handlers.game_guess_number.start_new_game', new_callable=AsyncMock)
 async def test_button_handler_start_number_game(mock_start_new_game, mock_update_callback, mock_context_with_admin):
     """Test that the 'Guess the Number' button starts a new game."""
     mock_update_callback.callback_query.data = 'start_number_game'

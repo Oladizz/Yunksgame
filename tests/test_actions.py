@@ -3,8 +3,8 @@ from unittest.mock import MagicMock, AsyncMock, patch
 import time
 from telegram import Update
 from telegram.ext import CallbackContext
-from yunks_game_2_0_1.handlers import actions
-from yunks_game_2_0_1 import database
+from handlers import actions
+import database
 
 @pytest.fixture
 def mock_update():
@@ -56,8 +56,8 @@ def mock_context():
 async def test_give_xp_success(mock_update, mock_context, mocker):
     """Test a successful XP transfer."""
     mock_context.args = ['50']
-    mocker.patch('yunks_game_2_0_1.database.get_user_data', new_callable=AsyncMock, return_value={'xp': 100})
-    mock_transfer = mocker.patch('yunks_game_2_0_1.database.transfer_xp', new_callable=AsyncMock, return_value=True)
+    mocker.patch('database.get_user_data', new_callable=AsyncMock, return_value={'xp': 100})
+    mock_transfer = mocker.patch('database.transfer_xp', new_callable=AsyncMock, return_value=True)
 
     await actions.give_xp(mock_update, mock_context)
 
@@ -70,8 +70,8 @@ async def test_give_xp_success(mock_update, mock_context, mocker):
 async def test_give_xp_insufficient_funds(mock_update, mock_context, mocker):
     """Test trying to give more XP than available."""
     mock_context.args = ['150']
-    mocker.patch('yunks_game_2_0_1.database.get_user_data', new_callable=AsyncMock, return_value={'xp': 100})
-    mock_transfer = mocker.patch('yunks_game_2_0_1.database.transfer_xp')
+    mocker.patch('database.get_user_data', new_callable=AsyncMock, return_value={'xp': 100})
+    mock_transfer = mocker.patch('database.transfer_xp')
 
     await actions.give_xp(mock_update, mock_context)
 
@@ -118,7 +118,7 @@ async def test_steal_xp_success(mock_update, mock_context, mocker):
     """Test a successful steal."""
     mocker.patch('random.random', return_value=0.4) # Success
     mocker.patch('random.randint', return_value=10)
-    mock_transfer = mocker.patch('yunks_game_2_0_1.database.transfer_xp', new_callable=AsyncMock, return_value=True)
+    mock_transfer = mocker.patch('database.transfer_xp', new_callable=AsyncMock, return_value=True)
 
     await actions.steal_xp(mock_update, mock_context)
 
@@ -130,7 +130,7 @@ async def test_steal_xp_success(mock_update, mock_context, mocker):
 async def test_steal_xp_failure(mock_update, mock_context, mocker):
     """Test a failed steal."""
     mocker.patch('random.random', return_value=0.6) # Fail
-    mock_add_xp = mocker.patch('yunks_game_2_0_1.database.add_xp', new_callable=AsyncMock)
+    mock_add_xp = mocker.patch('database.add_xp', new_callable=AsyncMock)
 
     await actions.steal_xp(mock_update, mock_context)
 
@@ -161,7 +161,7 @@ async def test_steal_xp_no_reply(mock_update, mock_context):
 async def test_award_xp_success(mock_update, mock_context, mocker):
     """Test a successful XP award by an admin."""
     mock_context.args = ['100']
-    mock_add_xp = mocker.patch('yunks_game_2_0_1.database.add_xp', new_callable=AsyncMock)
+    mock_add_xp = mocker.patch('database.add_xp', new_callable=AsyncMock)
 
     await actions.award_xp(mock_update, mock_context)
 

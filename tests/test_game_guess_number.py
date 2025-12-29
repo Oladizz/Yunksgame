@@ -2,8 +2,8 @@ import pytest
 from unittest.mock import MagicMock, AsyncMock, patch
 from telegram import Update
 from telegram.ext import CallbackContext
-from yunks_game_2_0_1.handlers import game_guess_number
-from yunks_game_2_0_1 import database
+from handlers import game_guess_number
+import database
 
 @pytest.fixture
 def mock_admin_update():
@@ -63,7 +63,7 @@ async def test_start_new_game_callback(mock_randint, mock_admin_update, mock_con
 @pytest.mark.asyncio
 async def test_handle_guess_correct(mock_admin_update, mock_context, mocker):
     """Test a correct guess."""
-    mock_add_xp = mocker.patch('yunks_game_2_0_1.database.add_xp', new_callable=AsyncMock)
+    mock_add_xp = mocker.patch('database.add_xp', new_callable=AsyncMock)
     mock_context.user_data['game'] = {'secret_number': 42, 'tries_left': 5}
     mock_admin_update.message.text = '42'
     

@@ -17,4 +17,4 @@ RUN pip install -e .
 COPY . .
 
 # Command to run the application
-CMD ["python", "bot_main.py"]
+CMD ["python", "-m", "bot_main"]

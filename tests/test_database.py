@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch, AsyncMock
 import firebase_admin
 import asyncio
 
-from yunks_game_2_0_1 import database
+import database
 
 @pytest.fixture
 def mock_db():
@@ -37,7 +37,7 @@ async def test_add_xp_calls_transactional_function(mocker, mock_db):
     xp_to_add = 10
     
     # Patch the transactional function directly
-    mock_sync_transaction = mocker.patch('yunks_game_2_0_1.database._add_xp_sync_transaction')
+    mock_sync_transaction = mocker.patch('database._add_xp_sync_transaction')
 
     await database.add_xp(mock_db, user_id, username, xp_to_add)
 

@@ -3,8 +3,8 @@ from unittest.mock import MagicMock, AsyncMock, patch
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext, JobQueue
 import asyncio
-from yunks_game_2_0_1.handlers import lastman_game
-from yunks_game_2_0_1 import database
+from handlers import lastman_game
+import database
 
 @pytest.fixture
 def mock_update():
@@ -49,7 +49,7 @@ def mock_context():
 @pytest.fixture
 def mock_db_add_xp(mocker):
     """Fixture to mock database.add_xp."""
-    return mocker.patch('yunks_game_2_0_1.database.add_xp', new_callable=AsyncMock)
+    return mocker.patch('database.add_xp', new_callable=AsyncMock)
 
 @pytest.mark.asyncio
 async def test_start_lastman_lobby_new_lobby(mock_update, mock_context):
@@ -184,7 +184,7 @@ async def test_lastman_callback_handler_start_success(mock_update, mock_context,
     mock_update.callback_query.data = 'lastman_start'
     
     # Patch start_elimination_phase to prevent actual job scheduling during unit test
-    mocker.patch('yunks_game_2_0_1.handlers.lastman_game.start_elimination_phase', new_callable=AsyncMock)
+    mocker.patch('handlers.lastman_game.start_elimination_phase', new_callable=AsyncMock)
 
     await lastman_game.lastman_callback_handler(mock_update, mock_context)
 
@@ -196,7 +196,7 @@ async def test_lastman_callback_handler_start_success(mock_update, mock_context,
 
 @pytest.mark.asyncio
 @patch('random.shuffle')
-@patch('yunks_game_2_0_1.handlers.lastman_game.notify_next_elimination', new_callable=AsyncMock)
+@patch('handlers.lastman_game.notify_next_elimination', new_callable=AsyncMock)
 async def test_start_elimination_phase(mock_notify, mock_shuffle, mock_update, mock_context):
     """Test the initiation of the elimination phase."""
     mock_context.chat_data['lastman_game'] = {
@@ -219,8 +219,8 @@ async def test_start_elimination_phase(mock_notify, mock_shuffle, mock_update, m
 
 @pytest.mark.asyncio
 @patch('yunks_game_2_0_1.handlers.lastman_game.ELIMINATION_INTERVAL', 0.1) # Shorter interval for testing
-@patch('yunks_game_2_0_1.handlers.lastman_game.end_lastman_game', new_callable=AsyncMock)
-@patch('yunks_game_2_0_1.handlers.lastman_game.notify_next_elimination', new_callable=AsyncMock)
+@patch('handlers.lastman_game.end_lastman_game', new_callable=AsyncMock)
+@patch('handlers.lastman_game.notify_next_elimination', new_callable=AsyncMock)
 async def test_perform_elimination(mock_notify, mock_end_game, mock_update, mock_context):
     """Test a single elimination."""
     mock_context.chat_data['lastman_game'] = {

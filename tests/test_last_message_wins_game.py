@@ -5,8 +5,8 @@ from telegram.ext import CallbackContext, JobQueue
 import asyncio
 import time
 
-from yunks_game_2_0_1.handlers import last_message_wins_game
-from yunks_game_2_0_1 import database
+from handlers import last_message_wins_game
+import database
 
 @pytest.fixture
 def mock_update():
@@ -51,12 +51,12 @@ def mock_context():
 @pytest.fixture
 def mock_db_add_xp(mocker):
     """Fixture to mock database.add_xp."""
-    return mocker.patch('yunks_game_2_0_1.database.add_xp', new_callable=AsyncMock)
+    return mocker.patch('database.add_xp', new_callable=AsyncMock)
 
 @pytest.fixture
 def mock_db_get_user(mocker):
     """Fixture to mock database.get_user_data."""
-    return mocker.patch('yunks_game_2_0_1.database.get_user_data', new_callable=AsyncMock)
+    return mocker.patch('database.get_user_data', new_callable=AsyncMock)
 
 @pytest.mark.asyncio
 async def test_start_lmw_lobby_new_lobby_success(mock_update, mock_context, mock_db_get_user, mock_db_add_xp):
@@ -113,7 +113,7 @@ async def test_lmw_callback_handler_start_success(mock_update, mock_context, moc
         'job': None
     }
     mock_update.callback_query.data = 'lmw_start'
-    mock_start_game = mocker.patch('yunks_game_2_0_1.handlers.last_message_wins_game.start_lmw_game', new_callable=AsyncMock)
+    mock_start_game = mocker.patch('handlers.last_message_wins_game.start_lmw_game', new_callable=AsyncMock)
 
     await last_message_wins_game.lmw_callback_handler(mock_update, mock_context)
 

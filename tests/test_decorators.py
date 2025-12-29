@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import MagicMock, AsyncMock, patch
 from telegram import Update
 from telegram.ext import CallbackContext
-from yunks_game_2_0_1.handlers import decorators
+from handlers import decorators
 
 @pytest.fixture
 def mock_update_private():

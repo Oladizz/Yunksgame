@@ -2,8 +2,8 @@ import pytest
 from unittest.mock import MagicMock, AsyncMock, patch
 from telegram import Update
 from telegram.ext import CallbackContext
-from yunks_game_2_0_1.handlers import core
-from yunks_game_2_0_1 import database
+from handlers import core
+import database
 
 @pytest.fixture
 def mock_context_with_admin():
@@ -67,7 +67,7 @@ async def test_leaderboard_command_default_limit(mock_context_with_admin, mocker
     update.callback_query = None
     update.effective_chat.type = 'group'
     mock_context_with_admin.args = [] # Ensure args is empty for default limit
-    mocker.patch('yunks_game_2_0_1.database.get_leaderboard', return_value=[])
+    mocker.patch('database.get_leaderboard', return_value=[])
 
     await core.leaderboard(update, mock_context_with_admin)
 
@@ -82,7 +82,7 @@ async def test_leaderboard_command_with_valid_limit(mock_context_with_admin, moc
     update.callback_query = None
     update.effective_chat.type = 'group'
     mock_context_with_admin.args = ['25']
-    mocker.patch('yunks_game_2_0_1.database.get_leaderboard', return_value=[])
+    mocker.patch('database.get_leaderboard', return_value=[])
 
     await core.leaderboard(update, mock_context_with_admin)
 
@@ -132,7 +132,7 @@ async def test_leaderboard_output_populated(mock_context_with_admin, mocker):
     update.effective_chat.type = 'group'
     mock_context_with_admin.args = []
     mock_leaderboard_data = [('user1', 100), ('user2', 95)]
-    mocker.patch('yunks_game_2_0_1.database.get_leaderboard', return_value=mock_leaderboard_data)
+    mocker.patch('database.get_leaderboard', return_value=mock_leaderboard_data)
 
     await core.leaderboard(update, mock_context_with_admin)
 

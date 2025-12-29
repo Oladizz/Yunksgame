@@ -2,8 +2,8 @@ import pytest
 from unittest.mock import MagicMock, AsyncMock, patch
 from telegram import Update
 from telegram.ext import CallbackContext
-from yunks_game_2_0_1.handlers import messages
-from yunks_game_2_0_1 import database
+from handlers import messages
+import database
 
 @pytest.mark.asyncio
 async def test_handle_message_awards_xp(mocker):
@@ -19,7 +19,7 @@ async def test_handle_message_awards_xp(mocker):
     mock_db_client = MagicMock()
     context.bot_data = {'db': mock_db_client}
 
-    mock_add_xp = mocker.patch('yunks_game_2_0_1.database.add_xp', new_callable=AsyncMock)
+    mock_add_xp = mocker.patch('database.add_xp', new_callable=AsyncMock)
 
     # Act
     await messages.handle_message(update, context)

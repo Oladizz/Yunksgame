@@ -7,12 +7,12 @@ import structlog
 import telegram
 import asyncio
 
-from yunks_game_2_0_1 import database
-from yunks_game_2_0_1.handlers import core, messages, actions, callbacks, game_guess_number, lastman_game, last_message_wins_game
-from yunks_game_2_0_1.logging_config import setup_logging
+import database
+from handlers import core, messages, actions, callbacks, game_guess_number, lastman_game, last_message_wins_game
+import logging_config
 
 # Set up logging
-setup_logging()
+logging_config.setup_logging()
 logger = structlog.get_logger(__name__)
 
 async def error_handler(update: object, context: CallbackContext) -> None:
