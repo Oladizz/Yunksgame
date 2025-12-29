@@ -7,9 +7,6 @@ import structlog
 import telegram
 import asyncio
 
-# Add project root to path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from yunks_game_2_0_1 import database
 from yunks_game_2_0_1.handlers import core, messages, actions, callbacks, game_guess_number, lastman_game, last_message_wins_game
 from yunks_game_2_0_1.logging_config import setup_logging
