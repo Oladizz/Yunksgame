@@ -7,12 +7,15 @@ import structlog
 import telegram
 import asyncio
 
-from . import database
-from .handlers import core, messages, actions, callbacks, game_guess_number, lastman_game, last_message_wins_game
-from . import logging_config
+# Add the directory containing 'yunks_game_2_0_1' to sys.path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+import database
+from handlers import core, messages, actions, callbacks, game_guess_number, lastman_game, last_message_wins_game
+from logging_config import setup_logging
 
 # Set up logging
-logging_config.setup_logging()
+setup_logging()
 logger = structlog.get_logger(__name__)
 
 async def error_handler(update: object, context: CallbackContext) -> None:

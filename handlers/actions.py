@@ -3,7 +3,7 @@ import time
 from telegram import Update
 from telegram.ext import CallbackContext
 import structlog
-from .. import database as db
+import database as db
 from .decorators import is_admin
 
 logger = structlog.get_logger(__name__)

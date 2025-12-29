@@ -2,7 +2,7 @@ import random
 import structlog
 from telegram import Update
 from telegram.ext import CallbackContext
-from .. import database as db
+import database as db
 from .decorators import is_admin
 
 logger = structlog.get_logger(__name__)

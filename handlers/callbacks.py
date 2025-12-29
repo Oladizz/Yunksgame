@@ -2,7 +2,7 @@ import html
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
 import structlog
-from .. import database as db # Assuming database is needed for profile/leaderboard
+import database as db # Assuming database is needed for profile/leaderboard
 from . import core, game_guess_number, lastman_game, last_message_wins_game # Import core handlers for start, leaderboard
 
 logger = structlog.get_logger(__name__)
