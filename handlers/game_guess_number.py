@@ -2,8 +2,8 @@ import random
 import structlog
 from telegram import Update
 from telegram.ext import CallbackContext
-from yunks_game_2_0_1 import database as db
-from yunks_game_2_0_1.handlers.decorators import is_admin
+from .. import database as db
+from .decorators import is_admin
 
 logger = structlog.get_logger(__name__)
 

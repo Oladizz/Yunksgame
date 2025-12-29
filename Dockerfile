@@ -17,4 +17,4 @@ RUN pip install -e .
 COPY . .
 
 # Command to run the application
-CMD ["python", "-m", "bot_main"]
+CMD ["python", "-m", "yunks_game_2_0_1.bot_main"]
